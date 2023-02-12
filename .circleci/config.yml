@@ -8,6 +8,9 @@ version: 2.1
 
 # Default settings for executors
 
+orbs:
+  win: circleci/windows@5.0.0
+
 defaults: &defaults
   working_directory: ~/repo
   environment:
@@ -80,6 +83,16 @@ commands:
             - repo
           key: clojure-<< parameters.cache_version >>-{{ checksum "/tmp/clojure_cache_seed" }}
 
+  setup-windows:
+    steps:
+      - checkout
+      - run:
+          name: Install lein 2.10.0
+          command: >-
+            $(iwr -Uri https://raw.githubusercontent.com/technomancy/leiningen/2.10.0/bin/lein.bat -outfile lein.bat | Out-host; $?)
+            -and $(.\lein.bat self-install | Out-host; $?)
+            -and $(.\lein.bat --version | Out-host; $?)
+
 ######################################################################
 #
 # End general purpose configs
@@ -132,100 +145,140 @@ jobs:
             - store_test_results:
                 path: test-results
 
+  test_code_win_java_system:
+    description: |
+      Run tests on MS-Windows using the system's JDK version and given
+      CLOJURE_VERSION.
+    executor: win/default
+    parameters:
+      clojure_version:
+        description: Version of Clojure to test against
+        type: string
+    steps:
+      - setup-windows
+      - run:
+          name: run tests
+          shell: cmd.exe
+          command: >-
+            java -version &&
+            .\lein.bat with-profile -user,+<< parameters.clojure_version >>,+test run -m kaocha.runner --no-capture-output
+
 # The ci-test-matrix does the following:
 #
-# - run tests against the target matrix
-#   - Java 8, 11 and 15
-#   - Clojure 1.7, 1.8, 1.9, 1.10, master
-# - linter, eastwood and cljfmt
-# - verifies cljdoc config
-# - runs code coverage report
+# - Linux
+#   - run tests against the target matrix
+#     - Java 8, 11 and 15
+#     - Clojure 1.7, 1.8, 1.9, 1.10, 1.11 master
+#   - linter, eastwood and cljfmt
+#   - verifies cljdoc config
+#   - runs code coverage report
+# - MS-Windows
+#   - run tests against installed java version and Clojure 1.11
 
 workflows:
   version: 2.1
   ci-test-matrix:
     jobs:
       - test_code:
-          name: Java 8, Clojure 1.7
+          name: U, Java 8, Clj 1.7
           clojure_version: "1.7"
           jdk_version: openjdk8
       - test_code:
-          name: Java 8, Clojure 1.8
+          name: U, Java 8, Clj 1.8
           clojure_version: "1.8"
           jdk_version: openjdk8
       - test_code:
-          name: Java 8, Clojure 1.9
+          name: U, Java 8, Clj 1.9
           clojure_version: "1.9"
           jdk_version: openjdk8
       - test_code:
-          name: Java 8, Clojure 1.10
+          name: U, Java 8, Clj 1.10
           clojure_version: "1.10"
           jdk_version: openjdk8
       - test_code:
-          name: Java 8, Clojure master
+          name: U, Java 8, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk8
+      - test_code:
+          name: U, Java 8, Clj master
           clojure_version: "master"
           jdk_version: openjdk8
       - test_code:
-          name: Java 11, Clojure 1.7
+          name: U, Java 11, Clj 1.7
           clojure_version: "1.7"
           jdk_version: openjdk11
       - test_code:
-          name: Java 11, Clojure 1.8
+          name: U, Java 11, Clj 1.8
           clojure_version: "1.8"
           jdk_version: openjdk11
       - test_code:
-          name: Java 11, Clojure 1.9
+          name: U, Java 11, Clj 1.9
           clojure_version: "1.9"
           jdk_version: openjdk11
       - test_code:
-          name: Java 11, Clojure 1.10
+          name: U, Java 11, Clj 1.10
           clojure_version: "1.10"
           jdk_version: openjdk11
       - test_code:
-          name: Java 11, Clojure master
+          name: U, Java 11, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 11, Clj master
           clojure_version: "master"
           jdk_version: openjdk11
       - test_code:
-          name: Java 17, Clojure 1.7
+          name: U, Java 17, Clj 1.7
           clojure_version: "1.7"
           jdk_version: openjdk17
       - test_code:
-          name: Java 17, Clojure 1.8
+          name: U, Java 17, Clj 1.8
           clojure_version: "1.8"
           jdk_version: openjdk17
       - test_code:
-          name: Java 17, Clojure 1.9
+          name: U, Java 17, Clj 1.9
           clojure_version: "1.9"
           jdk_version: openjdk17
       - test_code:
-          name: Java 17, Clojure 1.10
+          name: U, Java 17, Clj 1.10
           clojure_version: "1.10"
           jdk_version: openjdk17
       - test_code:
-          name: Java 17, Clojure master
+          name: U, Java 17, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk17
+      - test_code:
+          name: U, Java 17, Clj master
           clojure_version: "master"
           jdk_version: openjdk17
       # Add back in when Java 18 is released
       # - test_code:
-      #     name: Java 18, Clojure 1.7
+      #     name: U, Java 18, Clj 1.7
       #     clojure_version: "1.7"
       #     jdk_version: openjdk18
       # - test_code:
-      #     name: Java 18, Clojure 1.8
+      #     name: U, Java 18, Clj 1.8
       #     clojure_version: "1.8"
       #     jdk_version: openjdk18
       # - test_code:
-      #     name: Java 18, Clojure 1.9
+      #     name: U, Java 18, Clj 1.9
       #     clojure_version: "1.9"
       #     jdk_version: openjdk18
       # - test_code:
-      #     name: Java 18, Clojure 1.10
+      #     name: U, Java 18, Clj 1.10
       #     clojure_version: "1.10"
       #     jdk_version: openjdk18
       # - test_code:
-      #     name: Java 18, Clojure master
+      #     name: U, Java 18, Clj 1.11
+      #     clojure_version: "1.11"
+      #     jdk_version: openjdk18
+      # - test_code:
+      #     name: U, Java 18, Clj master
       #     clojure_version: "master"
       #     jdk_version: openjdk18
+      - test_code_win_java_system:
+          name: W, Java sys, Clj 1.11
+          clojure_version: "1.11"
       - util_job:
           name: Code Linting
           steps:

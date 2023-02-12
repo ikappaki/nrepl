@@ -35,6 +35,7 @@
                                    [commons-net/commons-net "3.6"]
                                    [lambdaisland/kaocha "1.0.672"]
                                    [lambdaisland/kaocha-junit-xml "0.0.76"]]
+                    :java-source-paths ["test/java"]
                     :plugins      [[test2junit "1.4.2"]]
                     :test2junit-output-dir "test-results"
                     ;; This skips any tests that doesn't work on all java versions
@@ -45,15 +46,17 @@
                            :dependencies [[com.kohlschutter.junixsocket/junixsocket-core "2.5.1" :extension "pom"]]}
              :clj-kondo {:dependencies [[clj-kondo "2022.01.15"]]}
              ;; Clojure versions matrix
-             :provided {:dependencies [[org.clojure/clojure "1.10.2"]]}
+             :provided {:dependencies [[org.clojure/clojure "1.11.1"]]}
              :1.7 {:dependencies [[org.clojure/clojure "1.7.0"]]}
              :1.8 {:dependencies [[org.clojure/clojure "1.8.0"]]}
              :1.9 {:dependencies [[org.clojure/clojure "1.9.0"]]}
              :1.10 {:dependencies [[org.clojure/clojure "1.10.2"]]
                     :source-paths ["src/spec"]}
+             :1.11 {:dependencies [[org.clojure/clojure "1.11.1"]]
+                    :source-paths ["src/spec"]}
              :master {:repositories [["snapshots"
                                       "https://oss.sonatype.org/content/repositories/snapshots"]]
-                      :dependencies [[org.clojure/clojure "1.11.0-master-SNAPSHOT"]]}
+                      :dependencies [[org.clojure/clojure "1.12.0-master-SNAPSHOT"]]}
 
              ;;; Maintenance profile
              ;;
