@@ -180,23 +180,23 @@ workflows:
   ci-test-matrix:
     jobs:
       - test_code:
-          name: U, Java 8, Clj 1.7
+          name: U1, Java 8, Clj 1.7
           clojure_version: "1.7"
           jdk_version: openjdk8
       - test_code:
-          name: U, Java 8, Clj 1.8
+          name: U12, Java 8, Clj 1.8
           clojure_version: "1.8"
           jdk_version: openjdk8
       - test_code:
-          name: U, Java 8, Clj 1.9
+          name: U123, Java 8, Clj 1.9
           clojure_version: "1.9"
           jdk_version: openjdk8
       - test_code:
-          name: U, Java 8, Clj 1.10
+          name: U1234, Java 8, Clj 1.10
           clojure_version: "1.10"
           jdk_version: openjdk8
       - test_code:
-          name: U, Java 8, Clj 1.11
+          name: U12345, Java 8, Clj 1.11
           clojure_version: "1.11"
           jdk_version: openjdk8
       - test_code:
