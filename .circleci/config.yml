@@ -171,8 +171,9 @@ jobs:
       - run:
           name: run tests
           command: >-
-            $(java -version)
-            -and $(bb test)
+            $(java -version | Out-host; $?)
+            -and $(Write-host $env:PATH | Out-host; $?)
+            -and $(bb test | Out-host; $?)
 
 # The ci-test-matrix does the following:
 #
