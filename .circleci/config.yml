@@ -95,7 +95,7 @@ commands:
       - checkout
       - run:
           name: Install babashka latest
-          :command: >-
+          command: >-
             $(iwr get.scoop.sh -outfile 'install.ps1')
             -and $(.\install.ps1 -RunAsAdmin)
             -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure)
