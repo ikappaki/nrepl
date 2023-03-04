@@ -89,12 +89,13 @@ commands:
       - run:
           name: Install babashka latest
           command: >-
-            $(iwr get.scoop.sh -outfile 'install.ps1')
-            -and $(.\install.ps1 -RunAsAdmin)
-            -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure)
-            -and $(scoop bucket add extras)
-            -and $(scoop install babashka)
-            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims).Path;`$env:PATH"""))
+            $(iwr get.scoop.sh -outfile 'install.ps1' | Out-host; $?)
+            -and $(.\install.ps1 -RunAsAdmin | Out-host; $?)
+            -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; $?)
+            -and $(scoop bucket add extras | Out-host; $?)
+            -and $(scoop install babashka | Out-host; $?)
+            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims).Path;`$env:PATH""") | Out-host; $?)
+            -and $(Write-host $env:PATH | Out-host; $?)
 
       - run:
           name: Install lein 2.10.0
