@@ -94,7 +94,7 @@ commands:
             -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure)
             -and $(scoop bucket add extras)
             -and $(scoop install babashka)
-            -and $(add-content $PROFILE $("`$env:PATH=""$env:$(Resolve-Path ~\scoop\shims).Path;`$env:PATH"""))
+            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims).Path;`$env:PATH"""))
 
       - run:
           name: Install lein 2.10.0
