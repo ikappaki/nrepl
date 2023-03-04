@@ -89,13 +89,13 @@ commands:
       - run:
           name: Install scoop latest
           command: >-
-            $(iwr get.scoop.sh -outfile 'install.ps1' | Out-host; if (-not $?) {exit 1})
-            -and $(.\install.ps1 -RunAsAdmin | Out-host; if (-not $?) {exit 1})
-            -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; if (-not $?) {exit 1})
+            $(iwr get.scoop.sh -outfile 'install.ps1' | Out-host; if(-not $?){exit 1}else{$?})
+            -and $(.\install.ps1 -RunAsAdmin | Out-host; if(-not $?){exit 1}else{$?})
+            -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; if(-not $?){exit 1}else{$?})
             -and $(scoop bucket add extras | Out-host; if (-not $?) { exit 1})
-            -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; if (-not $?) {exit 1})
-            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH""") | Out-host; if (-not $?) {exit 1})
-            -and $(Write-host $env:PATH | Out-host; if (-not $?) {exit 1})
+            -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; if(-not $?){exit 1}else{$?})
+            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH""") | Out-host; if(-not $?){exit 1}else{$?})
+            -and $(Write-host $env:PATH | Out-host; if(-not $?){exit 1}else{$?})
 
       - run:
           name: Install babashka latest
@@ -173,8 +173,8 @@ jobs:
       - run:
           name: run tests
           command: >-
-            $(java -version | Out-host; if (-not $?) {exit 1})
-            -and $(bb test | Out-host; if (-not $?) {exit 1})
+            $(java -version | Out-host; if(-not $?){exit 1}else{$?})
+            -and $(bb test | Out-host; if(-not $?){exit 1}else{$?})
 
 # The ci-test-matrix does the following:
 #
