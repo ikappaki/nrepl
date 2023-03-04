@@ -66,6 +66,13 @@ commands:
           name: Install make
           command: |
             sudo apt-get install make
+
+      - run:
+          name: Install babashka latest
+          command: |
+            bash <(curl -s https://raw.githubusercontent.com/borkdude/babashka/master/install) --dir ~
+            sudo mv ~/bb /usr/local/bin/bb
+
       - run:
           name: Generate Cache Checksum
           command: |
@@ -87,6 +94,15 @@ commands:
     steps:
       - checkout
       - run:
+          name: Install babashka latest
+          :command: >-
+            $(iwr get.scoop.sh -outfile 'install.ps1')
+            -and $(.\install.ps1 -RunAsAdmin)
+            -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure)
+            -and $(scoop bucket add extras)
+            -and $(scoop install babashka)
+
+        - run:
           name: Install lein 2.10.0
           command: >-
             $(iwr -Uri https://raw.githubusercontent.com/technomancy/leiningen/2.10.0/bin/lein.bat -outfile lein.bat | Out-host; $?)
@@ -141,7 +157,7 @@ jobs:
           steps:
             - run:
                 name: Running tests
-                command: make test
+                command: bb test
             - store_test_results:
                 path: test-results
 
@@ -161,7 +177,7 @@ jobs:
           shell: cmd.exe
           command: >-
             java -version &&
-            .\lein.bat with-profile -user,+<< parameters.clojure_version >>,+test run -m kaocha.runner --no-capture-output
+            bb test
 
 # The ci-test-matrix does the following:
 #
@@ -200,7 +216,7 @@ workflows:
           clojure_version: "1.11"
           jdk_version: openjdk8
       - test_code:
-          name: U, Java 8, Clj master
+          name: U1234567, Java 8, Clj master
           clojure_version: "master"
           jdk_version: openjdk8
       - test_code:
@@ -285,19 +301,19 @@ workflows:
             - run:
                 name: Running Eastwood
                 command: |
-                  make eastwood
+                  bb eastwood
             - run:
                 name: Running cljfmt
                 command: |
-                  make cljfmt
+                  bb cljfmt
             - run:
                 name: Running clj-kondo
                 command: |
-                  make kondo
+                  bb kondo
       - util_job:
           name: Checking Cljdoc
           steps:
             - run:
                 name: Verifying Cljdoc
                 command: |
-                  make verify_cljdoc
+                  bb verify_cljdoc
