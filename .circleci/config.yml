@@ -89,13 +89,13 @@ commands:
       - run:
           name: Install scoop latest
           command: |
-            iwr get.scoop.sh -outfile 'install.ps1'; if(-not $?){exit 5}
-            .\install.ps1 -RunAsAdmin; if(-not $?){exit 5}
-            scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure; if(-not $?){exit 5}
-            scoop bucket add extras; if(-not $?) {exit 5}
-            New-Item -Path $PROFILE -ItemType "file" -Force; if(-not $?){exit 5}
+            iwr get.scoop.sh -outfile 'install.ps1'                                          ; if(-not $?){exit 5}
+            .\install.ps1 -RunAsAdmin                                                        ; if(-not $?){exit 5}
+            scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure         ; if(-not $?){exit 5}
+            scoop bucket add extras                                                          ; if(-not $?){exit 5}
+            New-Item -Path $PROFILE -ItemType "file" -Force                                  ; if(-not $?){exit 5}
             add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH"""); if(-not $?){exit 5}
-            Write-host $env:PATH; if(-not $?){exit 5}
+            Write-host $env:PATH                                                             ; if(-not $?){exit 5}
 
       - run:
           name: Install babashka latest
@@ -174,7 +174,7 @@ jobs:
           name: run tests
           command: |
             java -version; if(-not $?){exit 5}
-            bb test; if(-not $?){exit 5}
+            bb test      ; if(-not $?){exit 5}
 
 # The ci-test-matrix does the following:
 #
@@ -192,78 +192,78 @@ workflows:
   version: 2.1
   ci-test-matrix:
     jobs:
-      # - test_code:
-      #     name: U1, Java 8, Clj 1.7
-      #     clojure_version: "1.7"
-      #     jdk_version: openjdk8
-      # - test_code:
-      #     name: U12, Java 8, Clj 1.8
-      #     clojure_version: "1.8"
-      #     jdk_version: openjdk8
-      # - test_code:
-      #     name: U123, Java 8, Clj 1.9
-      #     clojure_version: "1.9"
-      #     jdk_version: openjdk8
-      # - test_code:
-      #     name: U1234, Java 8, Clj 1.10
-      #     clojure_version: "1.10"
-      #     jdk_version: openjdk8
-      # - test_code:
-      #     name: U12345, Java 8, Clj 1.11
-      #     clojure_version: "1.11"
-      #     jdk_version: openjdk8
-      # - test_code:
-      #     name: U1234567, Java 8, Clj master
-      #     clojure_version: "master"
-      #     jdk_version: openjdk8
-      # - test_code:
-      #     name: U, Java 11, Clj 1.7
-      #     clojure_version: "1.7"
-      #     jdk_version: openjdk11
-      # - test_code:
-      #     name: U, Java 11, Clj 1.8
-      #     clojure_version: "1.8"
-      #     jdk_version: openjdk11
-      # - test_code:
-      #     name: U, Java 11, Clj 1.9
-      #     clojure_version: "1.9"
-      #     jdk_version: openjdk11
-      # - test_code:
-      #     name: U, Java 11, Clj 1.10
-      #     clojure_version: "1.10"
-      #     jdk_version: openjdk11
-      # - test_code:
-      #     name: U, Java 11, Clj 1.11
-      #     clojure_version: "1.11"
-      #     jdk_version: openjdk11
-      # - test_code:
-      #     name: U, Java 11, Clj master
-      #     clojure_version: "master"
-      #     jdk_version: openjdk11
-      # - test_code:
-      #     name: U, Java 17, Clj 1.7
-      #     clojure_version: "1.7"
-      #     jdk_version: openjdk17
-      # - test_code:
-      #     name: U, Java 17, Clj 1.8
-      #     clojure_version: "1.8"
-      #     jdk_version: openjdk17
-      # - test_code:
-      #     name: U, Java 17, Clj 1.9
-      #     clojure_version: "1.9"
-      #     jdk_version: openjdk17
-      # - test_code:
-      #     name: U, Java 17, Clj 1.10
-      #     clojure_version: "1.10"
-      #     jdk_version: openjdk17
-      # - test_code:
-      #     name: U, Java 17, Clj 1.11
-      #     clojure_version: "1.11"
-      #     jdk_version: openjdk17
-      # - test_code:
-      #     name: U, Java 17, Clj master
-      #     clojure_version: "master"
-      #     jdk_version: openjdk17
+      - test_code:
+          name: U1, Java 8, Clj 1.7
+          clojure_version: "1.7"
+          jdk_version: openjdk8
+      - test_code:
+          name: U12, Java 8, Clj 1.8
+          clojure_version: "1.8"
+          jdk_version: openjdk8
+      - test_code:
+          name: U123, Java 8, Clj 1.9
+          clojure_version: "1.9"
+          jdk_version: openjdk8
+      - test_code:
+          name: U1234, Java 8, Clj 1.10
+          clojure_version: "1.10"
+          jdk_version: openjdk8
+      - test_code:
+          name: U12345, Java 8, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk8
+      - test_code:
+          name: U1234567, Java 8, Clj master
+          clojure_version: "master"
+          jdk_version: openjdk8
+      - test_code:
+          name: U, Java 11, Clj 1.7
+          clojure_version: "1.7"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 11, Clj 1.8
+          clojure_version: "1.8"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 11, Clj 1.9
+          clojure_version: "1.9"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 11, Clj 1.10
+          clojure_version: "1.10"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 11, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 11, Clj master
+          clojure_version: "master"
+          jdk_version: openjdk11
+      - test_code:
+          name: U, Java 17, Clj 1.7
+          clojure_version: "1.7"
+          jdk_version: openjdk17
+      - test_code:
+          name: U, Java 17, Clj 1.8
+          clojure_version: "1.8"
+          jdk_version: openjdk17
+      - test_code:
+          name: U, Java 17, Clj 1.9
+          clojure_version: "1.9"
+          jdk_version: openjdk17
+      - test_code:
+          name: U, Java 17, Clj 1.10
+          clojure_version: "1.10"
+          jdk_version: openjdk17
+      - test_code:
+          name: U, Java 17, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk17
+      - test_code:
+          name: U, Java 17, Clj master
+          clojure_version: "master"
+          jdk_version: openjdk17
       # Add back in when Java 18 is released
       # - test_code:
       #     name: U, Java 18, Clj 1.7
@@ -289,28 +289,28 @@ workflows:
       #     name: U, Java 18, Clj master
       #     clojure_version: "master"
       #     jdk_version: openjdk18
-      - test_code_win_java_system:
-          name: W, Java sys, Clj 1.11
-          clojure_version: "1.11"
-      # - util_job:
-      #     name: Code Linting
-      #     steps:
-      #       - run:
-      #           name: Running Eastwood
-      #           command: |
-      #             bb eastwood
-      #       - run:
-      #           name: Running cljfmt
-      #           command: |
-      #             bb cljfmt
-      #       - run:
-      #           name: Running clj-kondo
-      #           command: |
-      #             bb kondo
-      # - util_job:
-      #     name: Checking Cljdoc
-      #     steps:
-      #       - run:
-      #           name: Verifying Cljdoc
-      #           command: |
-      #             bb verify_cljdoc
+      # - test_code_win_java_system:
+      #     name: W, Java sys, Clj 1.11
+      #     clojure_version: "1.11"
+      - util_job:
+          name: Code Linting
+          steps:
+            - run:
+                name: Running Eastwood
+                command: |
+                  bb eastwood
+            - run:
+                name: Running cljfmt
+                command: |
+                  bb cljfmt
+            - run:
+                name: Running clj-kondo
+                command: |
+                  bb kondo
+      - util_job:
+          name: Checking Cljdoc
+          steps:
+            - run:
+                name: Verifying Cljdoc
+                command: |
+                  bb verify_cljdoc
