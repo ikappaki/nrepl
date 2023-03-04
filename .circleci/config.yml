@@ -94,7 +94,7 @@ commands:
             -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; $?)
             -and $(scoop bucket add extras | Out-host; $?)
             -and $(scoop install babashka | Out-host; $?)
-            -and $(New-Item -Path $profile -ItemType "file" -Force | Out-host; $?)
+            -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; $?)
             -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims).Path;`$env:PATH""") | Out-host; $?)
             -and $(Write-host $env:PATH | Out-host; $?)
 
@@ -170,10 +170,9 @@ jobs:
       - setup-windows
       - run:
           name: run tests
-          shell: cmd.exe
           command: >-
-            java -version &&
-            bb test
+            $(java -version)
+            -and $(bb test)
 
 # The ci-test-matrix does the following:
 #
