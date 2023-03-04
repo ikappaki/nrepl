@@ -87,23 +87,25 @@ commands:
     steps:
       - checkout
       - run:
-          name: Install babashka latest
+          name: Install scoop latest
           command: >-
             $(iwr get.scoop.sh -outfile 'install.ps1' | Out-host; $?)
             -and $(.\install.ps1 -RunAsAdmin | Out-host; $?)
             -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; $?)
             -and $(scoop bucket add extras | Out-host; $?)
-            -and $(scoop install babashka | Out-host; $?)
             -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; $?)
             -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH""") | Out-host; $?)
             -and $(Write-host $env:PATH | Out-host; $?)
 
       - run:
-          name: Install lein 2.10.0
+          name: Install babashka latest
           command: >-
-            $(iwr -Uri https://raw.githubusercontent.com/technomancy/leiningen/2.10.0/bin/lein.bat -outfile lein.bat | Out-host; $?)
-            -and $(.\lein.bat self-install | Out-host; $?)
-            -and $(.\lein.bat --version | Out-host; $?)
+            -and $(scoop install babashka)
+
+      - run:
+          name: Install lein latest
+          command: >-
+            $(scoop install leiningen)
 
 ######################################################################
 #
