@@ -99,13 +99,13 @@ commands:
 
       - run:
           name: Install babashka latest
-          command: >-
-            -and $(scoop install babashka)
+          command:
+            scoop install babashka
 
       - run:
           name: Install lein latest
-          command: >-
-            $(scoop install leiningen)
+          command:
+            scoop install leiningen
 
 ######################################################################
 #
