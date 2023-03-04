@@ -91,8 +91,8 @@ commands:
           command: >-
             $(iwr get.scoop.sh -outfile 'install.ps1' | Out-host; $?)
             -and $(.\install.ps1 -RunAsAdmin | Out-host; $?)
-            -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; $?)
-            -and $(scoop bucket add extras | Out-host; $?)
+            -and $(cmd /c "scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure" | Out-host; $?)
+            -and $(cmd /c "scoop bucket add extras" | Out-host; $?)
             -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; $?)
             -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH""") | Out-host; $?)
             -and $(Write-host $env:PATH | Out-host; $?)
@@ -173,9 +173,9 @@ jobs:
       - run:
           name: run tests
           command: >-
-            $(java -version | Out-host; $?)
+            $(cmd /c "java -version" | Out-host; $?)
             -and $(Write-host $env:PATH | Out-host; $?)
-            -and $(bb test | Out-host; $?)
+            -and $(cmd /c "bb test")
 
 # The ci-test-matrix does the following:
 #
