@@ -37,8 +37,6 @@ executors:
 # Runs a given set of steps, with some standard pre- and post-
 # steps, including restoring of cache, saving of cache.
 #
-# we also install `make` here.
-#
 # Adapted from https://github.com/lambdaisland/meta/blob/master/circleci/clojure_orb.yml
 
 commands:
@@ -62,11 +60,6 @@ commands:
         description: "Change this value to force a cache update"
         default: "1"
     steps:
-      - run:
-          name: Install make
-          command: |
-            sudo apt-get install make
-
       - run:
           name: Install babashka latest
           command: |
@@ -101,8 +94,9 @@ commands:
             -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure)
             -and $(scoop bucket add extras)
             -and $(scoop install babashka)
+            -and $(add-content $PROFILE $("`$env:PATH=""$env:$(Resolve-Path ~\scoop\shims).Path;`$env:PATH"""))
 
-      - run:
+- run:
           name: Install lein 2.10.0
           command: >-
             $(iwr -Uri https://raw.githubusercontent.com/technomancy/leiningen/2.10.0/bin/lein.bat -outfile lein.bat | Out-host; $?)
