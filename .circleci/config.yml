@@ -95,7 +95,7 @@ commands:
             -and $(scoop bucket add extras | Out-host; $?)
             -and $(scoop install babashka | Out-host; $?)
             -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; $?)
-            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims).Path;`$env:PATH""") | Out-host; $?)
+            -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH""") | Out-host; $?)
             -and $(Write-host $env:PATH | Out-host; $?)
 
       - run:
