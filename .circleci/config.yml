@@ -96,7 +96,7 @@ commands:
             -and $(scoop install babashka)
             -and $(add-content $PROFILE $("`$env:PATH=""$env:$(Resolve-Path ~\scoop\shims).Path;`$env:PATH"""))
 
-- run:
+      - run:
           name: Install lein 2.10.0
           command: >-
             $(iwr -Uri https://raw.githubusercontent.com/technomancy/leiningen/2.10.0/bin/lein.bat -outfile lein.bat | Out-host; $?)
