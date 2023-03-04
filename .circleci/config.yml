@@ -92,7 +92,7 @@ commands:
             $(iwr get.scoop.sh -outfile 'install.ps1' | Out-host; if(-not $?){exit 1}else{$?})
             -and $(.\install.ps1 -RunAsAdmin | Out-host; if(-not $?){exit 1}else{$?})
             -and $(scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure | Out-host; if(-not $?){exit 1}else{$?})
-            -and $(scoop bucket add extras | Out-host; if (-not $?) { exit 1})
+            -and $(scoop bucket add extras | Out-host; if (-not $?) {exit 1}else{$?})
             -and $(New-Item -Path $PROFILE -ItemType "file" -Force | Out-host; if(-not $?){exit 1}else{$?})
             -and $(add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH""") | Out-host; if(-not $?){exit 1}else{$?})
             -and $(Write-host $env:PATH | Out-host; if(-not $?){exit 1}else{$?})
