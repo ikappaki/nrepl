@@ -102,7 +102,7 @@ commands:
             -and $(scoop bucket add extras)
             -and $(scoop install babashka)
 
-        - run:
+      - run:
           name: Install lein 2.10.0
           command: >-
             $(iwr -Uri https://raw.githubusercontent.com/technomancy/leiningen/2.10.0/bin/lein.bat -outfile lein.bat | Out-host; $?)
