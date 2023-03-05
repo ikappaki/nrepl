@@ -89,13 +89,13 @@ commands:
       - run:
           name: Install scoop latest
           command: |
-            iwr get.scoop.sh -outfile 'install.ps1'                                          ; if(-not $?){exit 5}
-            .\install.ps1 -RunAsAdmin                                                        ; if(-not $?){exit 5}
-            scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure         ; if(-not $?){exit 5}
-            scoop bucket add extras                                                          ; if(-not $?){exit 5}
-            New-Item -Path $PROFILE -ItemType "file" -Force                                  ; if(-not $?){exit 5}
-            add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH"""); if(-not $?){exit 5}
-            Write-host $env:PATH                                                             ; if(-not $?){exit 5}
+            iwr get.scoop.sh -outfile 'install.ps1'                                          ; if(-not $?){exit 9}
+            .\install.ps1 -RunAsAdmin                                                        ; if(-not $?){exit 9}
+            scoop bucket add scoop-clojure https://github.com/littleli/scoop-clojure         ; if(-not $?){exit 9}
+            scoop bucket add extras                                                          ; if(-not $?){exit 9}
+            New-Item -Path $PROFILE -ItemType "file" -Force                                  ; if(-not $?){exit 9}
+            add-content $PROFILE $("`$env:PATH=""$(Resolve-Path ~\scoop\shims);`$env:PATH"""); if(-not $?){exit 9}
+            Write-host $env:PATH                                                             ; if(-not $?){exit 9}
 
       - run:
           name: Install babashka latest
@@ -173,8 +173,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            java -version; if(-not $?){exit 5}
-            bb test      ; if(-not $?){exit 5}
+            java -version; if(-not $?){exit 9}
+            bb test      ; if(-not $?){exit 9}
 
 # The ci-test-matrix does the following:
 #
@@ -289,9 +289,9 @@ workflows:
       #     name: U, Java 18, Clj master
       #     clojure_version: "master"
       #     jdk_version: openjdk18
-      # - test_code_win_java_system:
-      #     name: W, Java sys, Clj 1.11
-      #     clojure_version: "1.11"
+      - test_code_win_java_system:
+          name: W, Java sys, Clj 1.11
+          clojure_version: "1.11"
       - util_job:
           name: Code Linting
           steps:

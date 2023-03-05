@@ -25,7 +25,7 @@
     text))
 
 (def sys-file-sep
-  "The character separting components in a path."
+  "The character separating components in a path."
   File/separator)
 
 (defn dir-sep->sys
