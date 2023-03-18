@@ -232,10 +232,10 @@ workflows:
       #     name: Lnx, Java 11, Clj 1.10
       #     clojure_version: "1.10"
       #     jdk_version: openjdk11
-      # - test_code:
-      #     name: Lnx, Java 11, Clj 1.11
-      #     clojure_version: "1.11"
-      #     jdk_version: openjdk11
+      - test_code:
+          name: Lnx, Java 11, Clj 1.11
+          clojure_version: "1.11"
+          jdk_version: openjdk11
       # - test_code:
       #     name: Lnx, Java 11, Clj master
       #     clojure_version: "master"

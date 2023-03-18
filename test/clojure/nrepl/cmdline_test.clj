@@ -207,6 +207,25 @@
       (.connect sock addr)
       (write-bencode (.getOutputStream sock) message))))
 
+(defn socket-file-exists?
+  "Check whether the unix SOCK-FILE exists."
+  [sock-file]
+  (case unix-domain-flavor
+    :jdk (.exists sock-file)
+    :junixsocket
+    ;; The .exists operation for socket files does not work on MS-Windows, thus
+    ;; we attempt a socket connection.
+    (try
+      (let [sock-path (str sock-file)
+            ^Class sock-class (find-class 'org.newsclub.net.unix.AFUNIXSocket)
+            new-instance (.getDeclaredMethod sock-class "newInstance" nil)
+            addr (unix-socket-address sock-path)]
+        (with-open [^Socket sock (.invoke new-instance nil nil)]
+          (.connect sock addr)
+          true))
+      (catch Exception _e
+        false))))
+
 (deftest ^:slow basic-fs-socket-behavior
   (if-not unix-domain-flavor
     (binding [*out* *err*]
@@ -229,10 +248,8 @@
             ;; this is done by waiting till the socket file is created, and then
             ;; waiting an extra 1s. (extra wait seems to help with test reliability
             ;; in CI. Question: why are we not using ack to do this? To investigate
-            (println :0)
-            (while (not (.exists sock-file))
+            (while (not (socket-file-exists? sock-file))
               (Thread/sleep 100))
-            (println :1)
             (Thread/sleep 1000)
             (case unix-domain-flavor
               :jdk
@@ -241,17 +258,11 @@
               :junixsocket
               (send-junixsocket-message {:code "(System/exit 42)" :op :eval}
                                         sock-path))
-            (println :2)
             (is (= 42 (.waitFor server)))
-            (println :3)
             (finally
-              (println :4)
-              (.destroy server)
-              (println :5))))
+              (.destroy server))))
         (finally
-          (println :6)
           (.delete sock-file)
-          (println :7)
           (Files/delete tmpdir))))))
 
 (deftest ^:slow cmdline-namespace-resolution
