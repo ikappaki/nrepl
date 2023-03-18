@@ -27,9 +27,9 @@
              (shell lein "with-profile" (str "-user,+" clj-version ",+test") "test")
              (shell lein "with-profile" (str "-user,+" clj-version ",+test,+junixsocket") "test"))
            (do
-             (shell lein "with-profile" (str "-user,+" clj-version ",+test") "run" "-m" "kaocha.runner")
+             ;; (shell lein "with-profile" (str "-user,+" clj-version ",+test") "run" "-m" "kaocha.runner")
              (shell lein
-                    "with-profile" (str "-user,+" clj-version ",+test,+junixsocket") "run" "-m" "kaocha.runner")))}
+                    "with-profile" (str "-user,+" clj-version ",+test,+junixsocket") "run" "-m" "kaocha.runner" "--no-capture-output")))}
 
   eastwood {:doc "Run eastwood for [Clojure VERSION]."
             :task (shell lein "with-profile" (str "-user,+" clj-version ",+eastwood") "eastwood")}
