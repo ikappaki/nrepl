@@ -229,8 +229,10 @@
             ;; this is done by waiting till the socket file is created, and then
             ;; waiting an extra 1s. (extra wait seems to help with test reliability
             ;; in CI. Question: why are we not using ack to do this? To investigate
+            (println :0)
             (while (not (.exists sock-file))
               (Thread/sleep 100))
+            (println :1)
             (Thread/sleep 1000)
             (case unix-domain-flavor
               :jdk
@@ -239,11 +241,17 @@
               :junixsocket
               (send-junixsocket-message {:code "(System/exit 42)" :op :eval}
                                         sock-path))
+            (println :2)
             (is (= 42 (.waitFor server)))
+            (println :3)
             (finally
-              (.destroy server))))
+              (println :4)
+              (.destroy server)
+              (println :5))))
         (finally
+          (println :6)
           (.delete sock-file)
+          (println :7)
           (Files/delete tmpdir))))))
 
 (deftest ^:slow cmdline-namespace-resolution
